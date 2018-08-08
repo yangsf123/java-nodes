@@ -1,0 +1,46 @@
+`
+package com.site.ysf.main;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+
+public class Main {
+
+    public static void main(String[] args) {
+        java.lang.Process process = null;
+        try {
+            ByteArrayOutputStream resultOutStream = new ByteArrayOutputStream();
+            process = Runtime.getRuntime().exec("ls aa");
+            InputStream errorIn = new BufferedInputStream(process.getErrorStream());
+            InputStream resultIn = new BufferedInputStream(process.getInputStream());
+            int num = 0;
+            byte[] bs = new byte[1024];
+
+
+            System.out.println("Error: " + errorIn==null);
+            System.out.println("Process: " + resultIn==null);
+
+            // 标准输出或标准错误，只会产生一个值
+//            while ((num = errorIn.read(bs)) != -1) {
+//                resultOutStream.write(bs, 0, num);
+//            }
+            while ((num = resultIn.read(bs)) != -1) {
+                resultOutStream.write(bs, 0, num);
+            }
+            String result = new String(resultOutStream.toByteArray());
+            System.out.println(result);
+            errorIn.close();errorIn = null;
+            resultIn.close();resultIn = null;
+            resultOutStream.close();resultOutStream = null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(process != null) process.destroy();
+            process = null;
+        }
+    }
+
+}
+`
